@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Activities</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+  <h2>🏃 Activities</h2>
+  <form method="POST" action="/activities/add" class="mb-3">
+    <input type="text" name="name" placeholder="Activity Name" required>
+    <input type="text" name="type" placeholder="Type (e.g., running)" required>
+    <button type="submit" class="btn btn-sm btn-success">Add</button>
+    <a href="/" class="btn btn-secondary btn-sm">Home</a>
+  </form>
+  <table class="table table-striped">
+    <tr><th>ID</th><th>Name</th><th>Type</th><th>Actions</th></tr>
+    {% for a in activities %}
+    <tr>
+      <td>{{a.activity_id}}</td>
+      <td>{{a.name}}</td>
+      <td>{{a.type}}</td>
+      <td><a href="/activities/delete/{{a.activity_id}}" class="btn btn-danger btn-sm">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>
