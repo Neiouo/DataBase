@@ -4,7 +4,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 # Connect to local MongoDB
-client = MongoClient("mongodb://atlas-sql-6919334b0c292835c9c1486a-gjnqqq.a.query.mongodb.net/demoDB?ssl=true&authSource=admin")
+client = MongoClient("mongodb+srv://eric:eric123456789@cluster0.11huqhs.mongodb.net/")
 db = client["demoDB"]
 collection = db["students"]
 
@@ -37,4 +37,5 @@ def list_users():
     
 if __name__ == "__main__":
     app.run(debug=True)
+
 
