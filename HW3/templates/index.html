@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>Flask + MongoDB Insert Many Demo</h3>
+
+<textarea id="jsonInput" rows="6" style="width:300px;">
+[
+  { "name": "John", "age": 20 },
+  { "name": "Mary", "age": 22 }
+]
+</textarea>
+
+<br><br>
+
+<button onclick="insertMany()">Insert Many</button>
+<button onclick="loadUsers()">Refresh User List</button>
+
+<hr>
+
+<h3>Current Users in MongoDB</h3>
+
+<div id="userList">Loading...</div>
+
+<script>
+// Insert Many
+async function insertMany() {
+  try {
+    const data = JSON.parse(document.getElementById("jsonInput").value);
+
+    const res = await fetch("/insertMany", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    alert(JSON.stringify(result));
+
+    loadUsers(); // auto refresh list
+  } catch (e) {
+    alert("Invalid JSON");
+  }
+}
+
+// Load user list
+async function loadUsers() {
+  const res = await fetch("/list");
+  const users = await res.json();
+
+  const container = document.getElementById("userList");
+  container.innerHTML = "";
+
+  users.forEach(u => {
+    const item = document.createElement("div");
+    item.textContent = `${u._id} | ${u.name} | age ${u.age}`;
+    container.appendChild(item);
+  });
+}
+
+// Load on page start
+loadUsers();
+</script>
+
+</body>
+</html>
