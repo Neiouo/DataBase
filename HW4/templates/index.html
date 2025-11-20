@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>Insert Many</h3>
+<textarea id="jsonInput" rows="5" style="width:300px;">
+[
+  { "name": "John", "age": 20 },
+  { "name": "Mary", "age": 22 }
+]
+</textarea>
+<br><br>
+<button onclick="insertMany()">Insert</button>
+<button onclick="loadUsers()">Refresh</button>
+
+<hr>
+
+<h3>Users</h3>
+<button onclick="deleteSelected()">Delete Selected</button>
+<div id="userList"></div>
+
+<script>
+async function insertMany() {
+  const data = JSON.parse(document.getElementById("jsonInput").value);
+  await fetch("/insertMany", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  loadUsers();
+}
+
+async function loadUsers() {
+  const res = await fetch("/list");
+  const users = await res.json();
+  const container = document.getElementById("userList");
+  container.innerHTML = "";
+
+  users.forEach(u => {
+    const row = document.createElement("div");
+    row.style.margin = "4px 0";
+    row.innerHTML = `
+      <input type="checkbox" class="delCheck" value="${u._id}">
+      ${u._id} | ${u.name} | age ${u.age}
+    `;
+    container.appendChild(row);
+  });
+}
+
+async function deleteSelected() {
+  const checks = document.querySelectorAll(".delCheck:checked");
+  const ids = Array.from(checks).map(c => c.value);
+
+  if (ids.length === 0) return;
+
+  await fetch("/deleteMany", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ids })
+  });
+  loadUsers();
+}
+
+loadUsers();
+</script>
+
+</body>
+</html>
