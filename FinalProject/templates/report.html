@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card mb-3">
+  {% if r.item.image_path %}
+    <img src="/{{ r.item.image_path }}" class="card-img-top" style="height:300px;object-fit:cover;">
+  {% endif %}
+  <div class="card-body">
+    <h4>{{ r.item.category }} • {{ r.report_type|capitalize }}</h4>
+    <p>{{ r.item.description }}</p>
+    <p><strong>Location:</strong> {{ r.location }}</p>
+    <p><strong>Reported by:</strong> {{ r.user.name }} ({{ r.user.email }})</p>
+    <p><strong>Date:</strong> {{ r.date_reported.strftime('%Y-%m-%d %H:%M') }}</p>
+    <p><strong>Status:</strong> {{ r.status }}</p>
+  </div>
+</div>
+{% endblock %}

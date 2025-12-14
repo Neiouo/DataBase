@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex mb-3">
+  <form class="d-flex" method="get" action="{{ url_for('index') }}">
+    <input class="form-control me-2" type="search" placeholder="Search" name="q" value="{{ q }}">
+    <select class="form-select me-2" name="category">
+      <option value="">All categories</option>
+      {% for c in categories %}
+        <option value="{{ c }}" {% if category==c %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-outline-primary" type="submit">Search</button>
+  </form>
+</div>
+
+<div class="row">
+{% for r in reports %}
+  <div class="col-md-4 mb-3">
+    <div class="card">
+      {% if r.item.image_path %}
+        <img src="/{{ r.item.image_path }}" class="card-img-top" style="height:240px;object-fit:cover;">
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ r.item.category }} - {{ r.report_type|capitalize }}</h5>
+        <p class="card-text">{{ r.item.description|truncate(220) }}</p>
+        <p class="card-text"><small class="text-muted">{{ r.location }} • {{ r.date_reported.strftime('%Y-%m-%d') }} • Status: {{ r.status }}</small></p>
+        <a href="{{ url_for('view_report', report_id=r.report_id) }}" class="btn btn-sm btn-primary">View</a>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <p>No reports found.</p>
+{% endfor %}
+</div>
+{% endblock %}
